@@ -1,6 +1,6 @@
 package com.abanoj.task_list.task.entities;
 
-import com.abanoj.task_list.tasklist.TaskList;
+import com.abanoj.task_list.tasklist.entities.TaskList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

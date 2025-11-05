@@ -4,7 +4,7 @@ import com.abanoj.task_list.task.entities.Task;
 import com.abanoj.task_list.task.entities.TaskPriority;
 import com.abanoj.task_list.task.entities.TaskStatus;
 import com.abanoj.task_list.task.repository.TaskRepository;
-import com.abanoj.task_list.tasklist.TaskList;
+import com.abanoj.task_list.tasklist.entities.TaskList;
 import com.abanoj.task_list.tasklist.repository.TaskListRepository;
 import org.springframework.stereotype.Service;
 

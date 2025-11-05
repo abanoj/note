@@ -1,4 +1,4 @@
-package com.abanoj.task_list.tasklist;
+package com.abanoj.task_list.tasklist.entities;
 
 import com.abanoj.task_list.task.entities.Task;
 import jakarta.persistence.*;
