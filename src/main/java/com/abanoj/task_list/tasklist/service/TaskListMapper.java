@@ -19,7 +19,7 @@ public class TaskListMapper {
         this.taskMapper = taskMapper;
     }
 
-    TaskList toTaskList(TaskListDto taskListDto){
+    public TaskList toTaskList(TaskListDto taskListDto){
         return new TaskList(
                 taskListDto.id(),
                 taskListDto.title(),
@@ -29,7 +29,7 @@ public class TaskListMapper {
         );
     }
 
-    TaskListDto toTaskListDto(TaskList taskList){
+    public TaskListDto toTaskListDto(TaskList taskList){
         List<Task> listOfTask = taskList.getTasks();
         return new TaskListDto(
                 taskList.getId(),
