@@ -2,17 +2,19 @@ package com.abanoj.task_list.tasklist.entities;
 
 import com.abanoj.task_list.task.entities.Task;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TaskList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +23,21 @@ public class TaskList {
     @Column(nullable = false)
     private String title;
     @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
     @Column(nullable = false, updatable = false)
     private LocalDateTime created;
     @Column(nullable = false)
     private LocalDateTime updated;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskList taskList = (TaskList) o;
+        return Objects.equals(id, taskList.id) && Objects.equals(title, taskList.title) && Objects.equals(created, taskList.created) && Objects.equals(updated, taskList.updated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, created, updated);
+    }
 }

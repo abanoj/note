@@ -2,14 +2,14 @@ package com.abanoj.task_list.task.entities;
 
 import com.abanoj.task_list.tasklist.entities.TaskList;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
@@ -30,4 +30,16 @@ public class Task {
     private LocalDateTime created;
     @Column(nullable = false)
     private LocalDateTime updated;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && taskStatus == task.taskStatus && taskPriority == task.taskPriority && Objects.equals(created, task.created) && Objects.equals(updated, task.updated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, taskStatus, taskPriority, created, updated);
+    }
 }

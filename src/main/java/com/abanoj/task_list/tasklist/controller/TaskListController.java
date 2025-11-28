@@ -1,7 +1,8 @@
 package com.abanoj.task_list.tasklist.controller;
 
 import com.abanoj.task_list.tasklist.entities.TaskList;
-import com.abanoj.task_list.tasklist.entities.TaskListDto;
+import com.abanoj.task_list.tasklist.entities.TaskListResponseDto;
+import com.abanoj.task_list.tasklist.entities.TaskListRequestDto;
 import com.abanoj.task_list.tasklist.service.TaskListMapper;
 import com.abanoj.task_list.tasklist.service.TaskListService;
 import org.springframework.web.bind.annotation.*;
@@ -22,25 +23,25 @@ public class TaskListController {
     }
 
     @GetMapping
-    public List<TaskListDto> getAll(){
+    public List<TaskListResponseDto> getAll(){
         return taskListService.findAllTaskList().stream().map(taskListMapper::toTaskListDto).toList();
     }
 
     @GetMapping("/{task-list-id}")
-    public Optional<TaskListDto> getTaskList(@PathVariable("task-list-id") Long id){
+    public Optional<TaskListResponseDto> getTaskList(@PathVariable("task-list-id") Long id){
         return taskListService.findTaskList(id).map(taskListMapper::toTaskListDto);
     }
 
     @PostMapping
-    public TaskListDto createTaskList(@RequestBody TaskListDto taskListDto){
-        TaskList taskList = taskListMapper.toTaskList(taskListDto);
+    public TaskListResponseDto createTaskList(@RequestBody TaskListRequestDto taskListRequestDto){
+        TaskList taskList = taskListMapper.toTaskList(taskListRequestDto);
         return taskListMapper
                 .toTaskListDto(taskListService.createTaskList(taskList));
     }
 
     @PutMapping("/{task-list-id}")
-    public TaskListDto updateTaskList(@PathVariable("task-list-id") Long id, @RequestBody TaskListDto taskListDto){
-        TaskList taskList = taskListMapper.toTaskList(taskListDto);
+    public TaskListResponseDto updateTaskList(@PathVariable("task-list-id") Long id, @RequestBody TaskListResponseDto taskListResponseDto){
+        TaskList taskList = taskListMapper.toTaskList(taskListResponseDto);
         return taskListMapper
                 .toTaskListDto(taskListService.updateTaskList(id, taskList));
     }

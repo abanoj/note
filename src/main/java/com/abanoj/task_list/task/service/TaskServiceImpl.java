@@ -6,6 +6,7 @@ import com.abanoj.task_list.task.entities.TaskStatus;
 import com.abanoj.task_list.task.repository.TaskRepository;
 import com.abanoj.task_list.tasklist.entities.TaskList;
 import com.abanoj.task_list.tasklist.repository.TaskListRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -75,6 +76,7 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
+    @Transactional
     public void deleteTask(Long taskListId, Long id) {
         taskRepository.deleteByTaskListIdAndId(taskListId, id);
     }

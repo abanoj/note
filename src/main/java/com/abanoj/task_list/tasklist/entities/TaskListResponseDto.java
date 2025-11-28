@@ -4,7 +4,7 @@ import com.abanoj.task_list.task.entities.TaskDto;
 
 import java.util.List;
 
-public record TaskListDto(
+public record TaskListResponseDto(
         Long id,
         String title,
         Integer numberOfTask,

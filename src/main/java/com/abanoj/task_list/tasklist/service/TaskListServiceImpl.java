@@ -2,12 +2,14 @@ package com.abanoj.task_list.tasklist.service;
 
 import com.abanoj.task_list.tasklist.entities.TaskList;
 import com.abanoj.task_list.tasklist.repository.TaskListRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Service
 public class TaskListServiceImpl implements TaskListService {
 
     private final TaskListRepository taskListRepository;
