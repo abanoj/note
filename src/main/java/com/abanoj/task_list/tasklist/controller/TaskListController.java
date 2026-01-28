@@ -5,49 +5,57 @@ import com.abanoj.task_list.tasklist.entities.TaskListResponseDto;
 import com.abanoj.task_list.tasklist.entities.TaskListRequestDto;
 import com.abanoj.task_list.tasklist.service.TaskListMapper;
 import com.abanoj.task_list.tasklist.service.TaskListService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/task-list/")
+@RequestMapping("/api/v1/task-lists")
+@RequiredArgsConstructor
 public class TaskListController {
 
     private final TaskListService taskListService;
     private final TaskListMapper taskListMapper;
 
-    public TaskListController(TaskListService taskListService, TaskListMapper taskListMapper) {
-        this.taskListService = taskListService;
-        this.taskListMapper = taskListMapper;
-    }
-
     @GetMapping
-    public List<TaskListResponseDto> getAll(){
-        return taskListService.findAllTaskList().stream().map(taskListMapper::toTaskListDto).toList();
+    public ResponseEntity<List<TaskListResponseDto>> getAll(){
+        List<TaskListResponseDto> taskListResponseDtoList = taskListService.findAllTaskList().stream().map(taskListMapper::toTaskListDto).toList();
+        return ResponseEntity.ok(taskListResponseDtoList);
     }
 
-    @GetMapping("/{task-list-id}")
-    public Optional<TaskListResponseDto> getTaskList(@PathVariable("task-list-id") Long id){
-        return taskListService.findTaskList(id).map(taskListMapper::toTaskListDto);
+    @GetMapping("/{taskListId}")
+    public ResponseEntity<TaskListResponseDto> getTaskList(@PathVariable("taskListId") Long id){
+        TaskListResponseDto taskList = taskListService
+                .findTaskList(id)
+                .map(taskListMapper::toTaskListDto)
+                .orElseThrow(() -> new RuntimeException("Task List with id: " + id + " not found!"));
+        return ResponseEntity.ok(taskList);
     }
 
     @PostMapping
-    public TaskListResponseDto createTaskList(@RequestBody TaskListRequestDto taskListRequestDto){
+    public ResponseEntity<TaskListResponseDto> createTaskList(@RequestBody TaskListRequestDto taskListRequestDto){
         TaskList taskList = taskListMapper.toTaskList(taskListRequestDto);
-        return taskListMapper
-                .toTaskListDto(taskListService.createTaskList(taskList));
+        TaskListResponseDto taskListResponseDto = taskListMapper.toTaskListDto(taskListService.createTaskList(taskList));
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskListResponseDto);
     }
 
-    @PutMapping("/{task-list-id}")
-    public TaskListResponseDto updateTaskList(@PathVariable("task-list-id") Long id, @RequestBody TaskListResponseDto taskListResponseDto){
+    @PutMapping("/{taskListId}")
+    public ResponseEntity<TaskListResponseDto> updateTaskList(@PathVariable("taskListId") Long id, @RequestBody TaskListResponseDto taskListResponseDto){
         TaskList taskList = taskListMapper.toTaskList(taskListResponseDto);
-        return taskListMapper
-                .toTaskListDto(taskListService.updateTaskList(id, taskList));
+        TaskListResponseDto taskListUpdated = taskListMapper.toTaskListDto(taskListService.updateTaskList(id, taskList));
+        return ResponseEntity.ok(taskListUpdated);
     }
 
     @DeleteMapping("/{task-list-id}")
-    public void deleteTaskList(@PathVariable("task-list-id") Long id){
+    public ResponseEntity<Void> deleteTaskList(@PathVariable("task-list-id") Long id){
+        if(!taskListService.existsById(id)){
+            return ResponseEntity.notFound().build();
+        }
         taskListService.deleteTaskList(id);
+        return ResponseEntity.noContent().build();
     }
 }

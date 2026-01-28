@@ -1,6 +1,7 @@
 package com.abanoj.task_list.tasklist.entities;
 
 import com.abanoj.task_list.task.entities.Task;
+import com.abanoj.task_list.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,9 @@ public class TaskList {
     private LocalDateTime created;
     @Column(nullable = false)
     private LocalDateTime updated;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Override
     public boolean equals(Object o) {
