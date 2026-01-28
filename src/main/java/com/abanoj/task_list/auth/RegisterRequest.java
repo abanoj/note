@@ -1,5 +1,7 @@
 package com.abanoj.task_list.auth;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
     private String firstname;
     private String lastname;
+    @Email(message = "There must be a valid email")
     private String email;
+    @NotBlank(message = "There must be a password")
     private String password;
 }

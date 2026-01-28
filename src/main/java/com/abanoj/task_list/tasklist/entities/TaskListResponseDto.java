@@ -1,6 +1,7 @@
 package com.abanoj.task_list.tasklist.entities;
 
 import com.abanoj.task_list.task.entities.TaskDto;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 

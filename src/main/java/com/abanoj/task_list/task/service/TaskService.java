@@ -11,5 +11,6 @@ public interface TaskService {
     Task createTask(Long taskListId, Task task);
     Task updateTask(Long taskListId, Long id, Task task);
     void deleteTask(Long taskListId, Long id);
+    boolean existsById(Long taskListId, Long id);
 
 }

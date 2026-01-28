@@ -84,6 +84,13 @@ public class TaskServiceImpl implements TaskService{
         taskRepository.deleteByTaskListIdAndId(taskListId, id);
     }
 
+    @Override
+    public boolean existsById(Long taskListId, Long id) {
+        checkUserOwner(taskListId);
+        return taskRepository.existsById(id);
+    }
+
+
     private TaskList checkUserOwner(Long taskListId){
         String username = SecurityUtils.getCurrentUsername();
         User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));

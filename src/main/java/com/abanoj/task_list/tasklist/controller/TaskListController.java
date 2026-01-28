@@ -5,6 +5,7 @@ import com.abanoj.task_list.tasklist.entities.TaskListResponseDto;
 import com.abanoj.task_list.tasklist.entities.TaskListRequestDto;
 import com.abanoj.task_list.tasklist.service.TaskListMapper;
 import com.abanoj.task_list.tasklist.service.TaskListService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,21 +38,21 @@ public class TaskListController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskListResponseDto> createTaskList(@RequestBody TaskListRequestDto taskListRequestDto){
+    public ResponseEntity<TaskListResponseDto> createTaskList(@Valid @RequestBody TaskListRequestDto taskListRequestDto){
         TaskList taskList = taskListMapper.toTaskList(taskListRequestDto);
         TaskListResponseDto taskListResponseDto = taskListMapper.toTaskListDto(taskListService.createTaskList(taskList));
         return ResponseEntity.status(HttpStatus.CREATED).body(taskListResponseDto);
     }
 
     @PutMapping("/{taskListId}")
-    public ResponseEntity<TaskListResponseDto> updateTaskList(@PathVariable("taskListId") Long id, @RequestBody TaskListResponseDto taskListResponseDto){
-        TaskList taskList = taskListMapper.toTaskList(taskListResponseDto);
+    public ResponseEntity<TaskListResponseDto> updateTaskList(@PathVariable("taskListId") Long id, @Valid @RequestBody TaskListRequestDto taskListRequestDto){
+        TaskList taskList = taskListMapper.toTaskList(taskListRequestDto);
         TaskListResponseDto taskListUpdated = taskListMapper.toTaskListDto(taskListService.updateTaskList(id, taskList));
         return ResponseEntity.ok(taskListUpdated);
     }
 
-    @DeleteMapping("/{task-list-id}")
-    public ResponseEntity<Void> deleteTaskList(@PathVariable("task-list-id") Long id){
+    @DeleteMapping("/{taskListId}")
+    public ResponseEntity<Void> deleteTaskList(@PathVariable("taskListId") Long id){
         if(!taskListService.existsById(id)){
             return ResponseEntity.notFound().build();
         }
