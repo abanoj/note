@@ -1,6 +1,8 @@
 package com.abanoj.task_list.task.service;
 
 import com.abanoj.task_list.auth.SecurityUtils;
+import com.abanoj.task_list.exception.ResourceNotFoundException;
+import com.abanoj.task_list.exception.UnauthenticatedException;
 import com.abanoj.task_list.task.entities.Task;
 import com.abanoj.task_list.task.entities.TaskPriority;
 import com.abanoj.task_list.task.entities.TaskStatus;
@@ -67,7 +69,7 @@ public class TaskServiceImpl implements TaskService{
 
         Task taskToUpdate = taskRepository
                 .findByTaskListIdAndId(taskListId, id)
-                .orElseThrow(() -> new IllegalArgumentException("Task with id " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found!"));
 
         taskToUpdate.setTitle(task.getTitle());
         taskToUpdate.setTaskStatus(task.getTaskStatus());
@@ -93,13 +95,13 @@ public class TaskServiceImpl implements TaskService{
 
     private TaskList checkUserOwner(Long taskListId){
         String username = SecurityUtils.getCurrentUsername();
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UnauthenticatedException("User not found"));
         TaskList taskList = taskListRepository
                 .findById(taskListId)
-                .orElseThrow(() -> new IllegalArgumentException("Not found Task List wit id " + taskListId));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Task List wit id " + taskListId));
 
         if(!user.equals(taskList.getUser())){
-            throw new IllegalArgumentException("Not found Task List wit id " + taskListId);
+            throw new ResourceNotFoundException("Not found Task List wit id " + taskListId);
         }
         return taskList;
     }

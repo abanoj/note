@@ -1,5 +1,6 @@
 package com.abanoj.task_list.tasklist.controller;
 
+import com.abanoj.task_list.exception.ResourceNotFoundException;
 import com.abanoj.task_list.tasklist.entities.TaskList;
 import com.abanoj.task_list.tasklist.entities.TaskListResponseDto;
 import com.abanoj.task_list.tasklist.entities.TaskListRequestDto;
@@ -33,7 +34,7 @@ public class TaskListController {
         TaskListResponseDto taskList = taskListService
                 .findTaskList(id)
                 .map(taskListMapper::toTaskListDto)
-                .orElseThrow(() -> new RuntimeException("Task List with id: " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Task List with id: " + id + " not found!"));
         return ResponseEntity.ok(taskList);
     }
 

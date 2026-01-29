@@ -1,6 +1,8 @@
 package com.abanoj.task_list.tasklist.service;
 
 import com.abanoj.task_list.auth.SecurityUtils;
+import com.abanoj.task_list.exception.ResourceNotFoundException;
+import com.abanoj.task_list.exception.UnauthenticatedException;
 import com.abanoj.task_list.tasklist.entities.TaskList;
 import com.abanoj.task_list.tasklist.repository.TaskListRepository;
 import com.abanoj.task_list.user.User;
@@ -23,21 +25,21 @@ public class TaskListServiceImpl implements TaskListService {
     @Override
     public Optional<TaskList> findTaskList(Long taskListId) {
         String username = SecurityUtils.getCurrentUsername();
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UnauthenticatedException("User not found"));
         return taskListRepository.findByIdAndUser(taskListId, user);
     }
 
     @Override
     public List<TaskList> findAllTaskList() {
         String username = SecurityUtils.getCurrentUsername();
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UnauthenticatedException("User not found"));
         return taskListRepository.findAllByUser(user);
     }
 
     @Override
     public TaskList createTaskList(TaskList taskList) {
         String username = SecurityUtils.getCurrentUsername();
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UnauthenticatedException("User not found"));
         if(taskList.getId() != null) throw new IllegalArgumentException("TaskList already has and ID!");
         LocalDateTime now = LocalDateTime.now();
         taskList.setCreated(now);
@@ -53,7 +55,7 @@ public class TaskListServiceImpl implements TaskListService {
 
         TaskList taskListToUpdate = taskListRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("TaskList with id " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("TaskList with id " + id + " not found!"));
 
         taskListToUpdate.setTitle(taskList.getTitle());
         taskListToUpdate.setUpdated(LocalDateTime.now());
@@ -64,7 +66,7 @@ public class TaskListServiceImpl implements TaskListService {
     @Override
     public void deleteTaskList(Long id) {
         String username = SecurityUtils.getCurrentUsername();
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UnauthenticatedException("User not found"));
         taskListRepository.deleteById(id);
     }
 
