@@ -3,7 +3,6 @@ package com.abanoj.task_list.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -48,8 +47,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(exception = UnauthenticatedException.class)
-    public ResponseEntity<ErrorResponse> handleException(UnauthenticatedException ex, HttpServletRequest request){
+    @ExceptionHandler(exception = UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(UserNotFoundException ex, HttpServletRequest request){
         ErrorResponse errorResponse = new ErrorResponse(
                 ZonedDateTime.now(),
                 HttpStatus.UNAUTHORIZED.value(),

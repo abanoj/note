@@ -22,29 +22,28 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<TaskDto>> getAllTask(@PathVariable("taskListId") Long taskListId){
-        List<TaskDto> taskDtoList = taskService.findListTask(taskListId).stream().map(taskMapper::toDto).toList();
+        List<TaskDto> taskDtoList = taskService.findListTask(taskListId).stream().map(taskMapper::toTaskDto).toList();
         return ResponseEntity.ok(taskDtoList);
     }
 
     @GetMapping("/{taskId}")
     public ResponseEntity<TaskDto> getTask(@PathVariable("taskListId") Long taskListId, @PathVariable("taskId") Long taskId){
-        TaskDto taskDto = taskService
-                .findTask(taskListId, taskId).map(taskMapper::toDto)
-                .orElseThrow(() -> new RuntimeException("Task with id: " + taskId + " not found"));
+        Task task = taskService.findTask(taskListId, taskId);
+        TaskDto taskDto = taskMapper.toTaskDto(task);
         return ResponseEntity.ok(taskDto);
     }
 
     @PostMapping
     public ResponseEntity<TaskDto> createTask(@PathVariable("taskListId") Long taskListId, @Valid @RequestBody TaskDto newTaskDto){
         Task newTask = taskService.createTask(taskListId, taskMapper.toTask(newTaskDto));
-        TaskDto taskDto = taskMapper.toDto(newTask);
+        TaskDto taskDto = taskMapper.toTaskDto(newTask);
         return ResponseEntity.status(HttpStatus.CREATED).body(taskDto);
     }
 
     @PutMapping("/{taskId}")
     public ResponseEntity<TaskDto> updateTask(@PathVariable("taskListId") Long taskListId, @PathVariable("taskId") Long taskId, @Valid @RequestBody TaskDto taskDtoToUpdate){
         Task taskUpdated = taskService.updateTask(taskListId, taskId, taskMapper.toTask(taskDtoToUpdate));
-        TaskDto taskDtoUpdated = taskMapper.toDto(taskUpdated);
+        TaskDto taskDtoUpdated = taskMapper.toTaskDto(taskUpdated);
         return ResponseEntity.ok(taskDtoUpdated);
     }
 

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Component
 public class TaskMapper {
-    public TaskDto toDto(Task task) {
+    public TaskDto toTaskDto(Task task) {
         return new TaskDto(
                 task.getId(),
                 task.getTitle(),

@@ -2,7 +2,6 @@ package com.abanoj.task_list.task.service;
 
 import com.abanoj.task_list.auth.SecurityUtils;
 import com.abanoj.task_list.exception.ResourceNotFoundException;
-import com.abanoj.task_list.exception.UnauthenticatedException;
 import com.abanoj.task_list.task.entities.Task;
 import com.abanoj.task_list.task.entities.TaskPriority;
 import com.abanoj.task_list.task.entities.TaskStatus;
@@ -10,7 +9,6 @@ import com.abanoj.task_list.task.repository.TaskRepository;
 import com.abanoj.task_list.tasklist.entities.TaskList;
 import com.abanoj.task_list.tasklist.repository.TaskListRepository;
 import com.abanoj.task_list.user.User;
-import com.abanoj.task_list.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,12 +24,14 @@ public class TaskServiceImpl implements TaskService{
 
     private final TaskRepository taskRepository;
     private final TaskListRepository taskListRepository;
-    private final UserRepository userRepository;
+    private final SecurityUtils securityUtils;
 
     @Override
-    public Optional<Task> findTask(Long taskListId, Long id) {
+    public Task findTask(Long taskListId, Long id) {
         checkUserOwner(taskListId);
-        return taskRepository.findByTaskListIdAndId(taskListId, id);
+        return taskRepository
+                .findByTaskListIdAndId(taskListId, id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task with id: " + id + " not found"));
     }
 
     @Override
@@ -61,6 +61,7 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
+    @Transactional
     public Task updateTask(Long taskListId, Long id, Task task) {
         if(task.getId() == null) throw new IllegalArgumentException("Task must have an ID");
         if(!Objects.equals(task.getId(), id)) throw new IllegalArgumentException("ID and Task id do not match!");
@@ -94,8 +95,7 @@ public class TaskServiceImpl implements TaskService{
 
 
     private TaskList checkUserOwner(Long taskListId){
-        String username = SecurityUtils.getCurrentUsername();
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new UnauthenticatedException("User not found"));
+        User user = securityUtils.getCurrentUser();
         TaskList taskList = taskListRepository
                 .findById(taskListId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Task List wit id " + taskListId));

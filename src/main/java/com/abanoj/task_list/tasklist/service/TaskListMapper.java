@@ -7,7 +7,7 @@ import com.abanoj.task_list.task.service.TaskMapper;
 import com.abanoj.task_list.tasklist.entities.TaskList;
 import com.abanoj.task_list.tasklist.entities.TaskListResponseDto;
 import com.abanoj.task_list.tasklist.entities.TaskListRequestDto;
-import com.abanoj.task_list.user.UserRepository;
+import com.abanoj.task_list.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +20,17 @@ import java.util.Optional;
 public class TaskListMapper {
 
     private final TaskMapper taskMapper;
-    private final UserRepository userRepository;
+    private final SecurityUtils securityUtils;
 
     public TaskList toTaskList(TaskListResponseDto taskListResponseDto){
-        String username = SecurityUtils.getCurrentUsername();
+        User user = securityUtils.getCurrentUser();
         return new TaskList(
                 taskListResponseDto.id(),
                 taskListResponseDto.title(),
                 Optional.of(taskListResponseDto.tasks().stream().map(taskMapper::toTask).toList()).orElse(null),
                 null,
                 null,
-                userRepository.findByEmail(username).orElseThrow()
+                user
         );
     }
 
@@ -38,14 +38,14 @@ public class TaskListMapper {
         return TaskList.builder().title(taskListRequestDto.title()).tasks(new ArrayList<>()).build();
     }
 
-    public TaskListResponseDto toTaskListDto(TaskList taskList){
+    public TaskListResponseDto toTaskListResponseDto(TaskList taskList){
         List<Task> listOfTask = taskList.getTasks();
         return new TaskListResponseDto(
                 taskList.getId(),
                 taskList.getTitle(),
                 Optional.of(listOfTask.size()).orElse(0),
                 calculateTaskListProgress(listOfTask),
-                Optional.of(listOfTask.stream().map(taskMapper::toDto).toList()).orElse(null)
+                Optional.of(listOfTask.stream().map(taskMapper::toTaskDto).toList()).orElse(null)
         );
     }
 

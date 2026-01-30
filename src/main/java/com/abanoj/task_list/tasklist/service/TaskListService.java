@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface TaskListService {
     List<TaskList> findAllTaskList();
-    Optional<TaskList> findTaskList(Long taskListId);
+    TaskList findTaskList(Long taskListId);
     TaskList createTaskList(TaskList taskList);
     TaskList updateTaskList(Long id, TaskList taskList);
     boolean existsById(Long id);
