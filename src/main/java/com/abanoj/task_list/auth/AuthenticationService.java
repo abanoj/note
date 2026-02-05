@@ -1,6 +1,7 @@
 package com.abanoj.task_list.auth;
 
 import com.abanoj.task_list.config.JwtService;
+import com.abanoj.task_list.exception.UserNotFoundException;
 import com.abanoj.task_list.user.Role;
 import com.abanoj.task_list.user.User;
 import com.abanoj.task_list.user.UserRepository;
@@ -38,7 +39,7 @@ public class AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found!"));
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
+    @NotBlank(message = "There must be a firstname")
     private String firstname;
+    @NotBlank(message = "There must be a lastname")
     private String lastname;
     @Email(message = "There must be a valid email")
     private String email;
