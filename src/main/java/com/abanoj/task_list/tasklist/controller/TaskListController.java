@@ -1,9 +1,9 @@
 package com.abanoj.task_list.tasklist.controller;
 
-import com.abanoj.task_list.tasklist.entities.TaskList;
-import com.abanoj.task_list.tasklist.entities.TaskListResponseDto;
-import com.abanoj.task_list.tasklist.entities.TaskListRequestDto;
-import com.abanoj.task_list.tasklist.service.TaskListMapper;
+import com.abanoj.task_list.tasklist.entity.TaskList;
+import com.abanoj.task_list.tasklist.dto.TaskListResponseDto;
+import com.abanoj.task_list.tasklist.dto.TaskListRequestDto;
+import com.abanoj.task_list.tasklist.mapper.TaskListMapper;
 import com.abanoj.task_list.tasklist.service.TaskListService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

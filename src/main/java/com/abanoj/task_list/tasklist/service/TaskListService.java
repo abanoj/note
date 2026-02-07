@@ -1,9 +1,8 @@
 package com.abanoj.task_list.tasklist.service;
 
-import com.abanoj.task_list.tasklist.entities.TaskList;
+import com.abanoj.task_list.tasklist.entity.TaskList;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskListService {
     List<TaskList> findAllTaskList();

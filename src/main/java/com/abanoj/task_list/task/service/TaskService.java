@@ -1,6 +1,6 @@
 package com.abanoj.task_list.task.service;
 
-import com.abanoj.task_list.task.entities.Task;
+import com.abanoj.task_list.task.entity.Task;
 
 import java.util.List;
 

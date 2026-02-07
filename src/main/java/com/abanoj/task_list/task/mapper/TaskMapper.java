@@ -1,9 +1,9 @@
-package com.abanoj.task_list.task.service;
+package com.abanoj.task_list.task.mapper;
 
-import com.abanoj.task_list.task.entities.Task;
-import com.abanoj.task_list.task.entities.TaskDto;
-import com.abanoj.task_list.task.entities.TaskPriority;
-import com.abanoj.task_list.task.entities.TaskStatus;
+import com.abanoj.task_list.task.entity.Task;
+import com.abanoj.task_list.task.dto.TaskDto;
+import com.abanoj.task_list.task.entity.TaskPriority;
+import com.abanoj.task_list.task.entity.TaskStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

@@ -2,7 +2,7 @@ package com.abanoj.task_list.tasklist.service;
 
 import com.abanoj.task_list.auth.SecurityUtils;
 import com.abanoj.task_list.exception.ResourceNotFoundException;
-import com.abanoj.task_list.tasklist.entities.TaskList;
+import com.abanoj.task_list.tasklist.entity.TaskList;
 import com.abanoj.task_list.tasklist.repository.TaskListRepository;
 import com.abanoj.task_list.user.User;
 import lombok.RequiredArgsConstructor;

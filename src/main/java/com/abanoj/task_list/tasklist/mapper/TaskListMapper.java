@@ -1,12 +1,12 @@
-package com.abanoj.task_list.tasklist.service;
+package com.abanoj.task_list.tasklist.mapper;
 
 import com.abanoj.task_list.auth.SecurityUtils;
-import com.abanoj.task_list.task.entities.Task;
-import com.abanoj.task_list.task.entities.TaskStatus;
-import com.abanoj.task_list.task.service.TaskMapper;
-import com.abanoj.task_list.tasklist.entities.TaskList;
-import com.abanoj.task_list.tasklist.entities.TaskListResponseDto;
-import com.abanoj.task_list.tasklist.entities.TaskListRequestDto;
+import com.abanoj.task_list.task.entity.Task;
+import com.abanoj.task_list.task.entity.TaskStatus;
+import com.abanoj.task_list.task.mapper.TaskMapper;
+import com.abanoj.task_list.tasklist.entity.TaskList;
+import com.abanoj.task_list.tasklist.dto.TaskListResponseDto;
+import com.abanoj.task_list.tasklist.dto.TaskListRequestDto;
 import com.abanoj.task_list.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

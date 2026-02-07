@@ -1,4 +1,4 @@
-package com.abanoj.task_list.tasklist.entities;
+package com.abanoj.task_list.tasklist.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

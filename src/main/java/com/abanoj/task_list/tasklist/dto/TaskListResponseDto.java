@@ -1,7 +1,6 @@
-package com.abanoj.task_list.tasklist.entities;
+package com.abanoj.task_list.tasklist.dto;
 
-import com.abanoj.task_list.task.entities.TaskDto;
-import jakarta.validation.constraints.NotBlank;
+import com.abanoj.task_list.task.dto.TaskDto;
 
 import java.util.List;
 

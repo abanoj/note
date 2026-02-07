@@ -2,11 +2,11 @@ package com.abanoj.task_list.task.service;
 
 import com.abanoj.task_list.auth.SecurityUtils;
 import com.abanoj.task_list.exception.ResourceNotFoundException;
-import com.abanoj.task_list.task.entities.Task;
-import com.abanoj.task_list.task.entities.TaskPriority;
-import com.abanoj.task_list.task.entities.TaskStatus;
+import com.abanoj.task_list.task.entity.Task;
+import com.abanoj.task_list.task.entity.TaskPriority;
+import com.abanoj.task_list.task.entity.TaskStatus;
 import com.abanoj.task_list.task.repository.TaskRepository;
-import com.abanoj.task_list.tasklist.entities.TaskList;
+import com.abanoj.task_list.tasklist.entity.TaskList;
 import com.abanoj.task_list.tasklist.repository.TaskListRepository;
 import com.abanoj.task_list.user.User;
 import jakarta.transaction.Transactional;

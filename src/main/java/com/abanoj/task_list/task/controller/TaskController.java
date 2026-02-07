@@ -1,8 +1,8 @@
 package com.abanoj.task_list.task.controller;
 
-import com.abanoj.task_list.task.entities.Task;
-import com.abanoj.task_list.task.entities.TaskDto;
-import com.abanoj.task_list.task.service.TaskMapper;
+import com.abanoj.task_list.task.entity.Task;
+import com.abanoj.task_list.task.dto.TaskDto;
+import com.abanoj.task_list.task.mapper.TaskMapper;
 import com.abanoj.task_list.task.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

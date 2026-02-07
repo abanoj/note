@@ -1,6 +1,6 @@
 package com.abanoj.task_list.tasklist.repository;
 
-import com.abanoj.task_list.tasklist.entities.TaskList;
+import com.abanoj.task_list.tasklist.entity.TaskList;
 import com.abanoj.task_list.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
