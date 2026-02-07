@@ -52,6 +52,6 @@ public class TaskListMapper {
     private Double calculateTaskListProgress(List<Task> tasks){
         if(tasks == null || tasks.isEmpty()) return null;
         long numberOfTaskDone = tasks.stream().filter(task -> task.getTaskStatus() == TaskStatus.DONE).count();
-        return (double) (numberOfTaskDone / tasks.size());
+        return (double) numberOfTaskDone / tasks.size();
     }
 }

@@ -41,6 +41,7 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
+    @Transactional
     public Task createTask(Long taskListId, Task task) {
         TaskList taskList = checkUserOwner(taskListId);
         TaskStatus taskStatus = Optional.ofNullable(task.getTaskStatus()).orElse(TaskStatus.PENDING);
@@ -98,10 +99,10 @@ public class TaskServiceImpl implements TaskService{
         User user = securityUtils.getCurrentUser();
         TaskList taskList = taskListRepository
                 .findById(taskListId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Task List wit id " + taskListId));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Task List with id " + taskListId));
 
         if(!user.equals(taskList.getUser())){
-            throw new ResourceNotFoundException("Not found Task List wit id " + taskListId);
+            throw new ResourceNotFoundException("Not found Task List with id " + taskListId);
         }
         return taskList;
     }

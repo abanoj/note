@@ -5,6 +5,7 @@ import com.abanoj.tasklist.exception.ResourceNotFoundException;
 import com.abanoj.tasklist.tasklist.entity.TaskList;
 import com.abanoj.tasklist.tasklist.repository.TaskListRepository;
 import com.abanoj.tasklist.user.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class TaskListServiceImpl implements TaskListService {
     }
 
     @Override
+    @Transactional
     public TaskList createTaskList(TaskList taskList) {
         User user = securityUtils.getCurrentUser();
         if(taskList.getId() != null) throw new IllegalArgumentException("TaskList already has and ID!");
@@ -45,6 +47,7 @@ public class TaskListServiceImpl implements TaskListService {
     }
 
     @Override
+    @Transactional
     public TaskList updateTaskList(Long id, TaskList taskList) {
         User user = securityUtils.getCurrentUser();
         if(taskList.getId() == null) throw new IllegalArgumentException("TaskList must have an ID");
@@ -61,8 +64,12 @@ public class TaskListServiceImpl implements TaskListService {
     }
 
     @Override
+    @Transactional
     public void deleteTaskList(Long id) {
-        securityUtils.getCurrentUser();
+        User user = securityUtils.getCurrentUser();
+        taskListRepository
+                .findByIdAndUser(id, user)
+                .orElseThrow(() -> new ResourceNotFoundException("TaskList with id " + id + " not found!"));
         taskListRepository.deleteById(id);
     }
 

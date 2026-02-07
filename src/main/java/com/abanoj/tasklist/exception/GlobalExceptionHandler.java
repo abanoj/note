@@ -55,12 +55,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(UserNotFoundException ex, HttpServletRequest request){
         ErrorResponse errorResponse = new ErrorResponse(
                 ZonedDateTime.now(),
-                HttpStatus.UNAUTHORIZED.value(),
-                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
                 ex.getMessage(),
                 request.getRequestURI()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(exception = MethodArgumentNotValidException.class)

@@ -24,7 +24,7 @@ public class Task {
     @Column(nullable = false)
     private TaskPriority taskPriority;
     @ManyToOne
-    @JoinColumn(name = "task_id")
+    @JoinColumn(name = "task_list_id")
     private TaskList taskList;
     @Column(nullable = false, updatable = false)
     private LocalDateTime created;
