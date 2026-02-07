@@ -1,5 +1,8 @@
 package com.abanoj.task_list.auth;
 
+import com.abanoj.task_list.auth.dto.AuthenticationRequest;
+import com.abanoj.task_list.auth.dto.AuthenticationResponse;
+import com.abanoj.task_list.auth.dto.RegisterRequest;
 import com.abanoj.task_list.config.JwtService;
 import com.abanoj.task_list.exception.UserNotFoundException;
 import com.abanoj.task_list.user.Role;
@@ -21,28 +24,24 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request){
         User user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .firstname(request.firstname())
+                .lastname(request.lastname())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
 
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        String jwtToken = jwtService.generateToken(user);
+        return new AuthenticationResponse(jwtToken);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found!"));
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        User user = userRepository.findByEmail(request.email()).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        String jwtToken = jwtService.generateToken(user);
+        return new AuthenticationResponse(jwtToken);
     }
 }

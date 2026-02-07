@@ -1,5 +1,8 @@
 package com.abanoj.task_list.auth;
 
+import com.abanoj.task_list.auth.dto.AuthenticationRequest;
+import com.abanoj.task_list.auth.dto.AuthenticationResponse;
+import com.abanoj.task_list.auth.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
