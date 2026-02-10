@@ -2,12 +2,12 @@ package com.abanoj.tasklist.token;
 
 import com.abanoj.tasklist.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import java.util.Objects;
+
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +16,7 @@ public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, columnDefinition = "TEXT")
     private String token;
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
@@ -24,4 +25,16 @@ public class Token {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Token token1 = (Token) o;
+        return Objects.equals(id, token1.id) && Objects.equals(token, token1.token);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, token);
+    }
 }

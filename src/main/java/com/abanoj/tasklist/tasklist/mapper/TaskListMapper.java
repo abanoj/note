@@ -43,9 +43,9 @@ public class TaskListMapper {
         return new TaskListResponseDto(
                 taskList.getId(),
                 taskList.getTitle(),
-                Optional.of(listOfTask.size()).orElse(0),
+                listOfTask.size(),
                 calculateTaskListProgress(listOfTask),
-                Optional.of(listOfTask.stream().map(taskMapper::toTaskDto).toList()).orElse(null)
+                listOfTask.stream().map(taskMapper::toTaskDto).toList()
         );
     }
 

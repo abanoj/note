@@ -75,6 +75,7 @@ public class TaskListServiceImpl implements TaskListService {
 
     @Override
     public boolean existsById(Long id){
-        return taskListRepository.existsById(id);
+        User user = securityUtils.getCurrentUser();
+        return taskListRepository.existsByIdAndUser(id, user);
     }
 }

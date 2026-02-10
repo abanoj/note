@@ -118,7 +118,7 @@ public class GlobalExceptionHandler {
                 ZonedDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                ex.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 request.getRequestURI()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

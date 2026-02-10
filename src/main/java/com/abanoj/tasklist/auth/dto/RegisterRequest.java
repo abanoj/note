@@ -9,6 +9,7 @@ public record RegisterRequest (
     @NotBlank(message = "There must be a lastname")
     String lastname,
     @Email(message = "There must be a valid email")
+    @NotBlank(message = "There must be a valid email")
     String email,
     @NotBlank(message = "There must be a password")
     String password

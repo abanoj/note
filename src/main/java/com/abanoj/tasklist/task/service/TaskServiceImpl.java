@@ -84,7 +84,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     @Transactional
     public void deleteTask(Long taskListId, Long id) {
-        checkUserOwner(taskListId);
+        existsById(taskListId, id);
         taskRepository.deleteByTaskListIdAndId(taskListId, id);
     }
 

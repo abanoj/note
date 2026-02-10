@@ -20,8 +20,10 @@ public class Task {
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TaskPriority taskPriority;
     @ManyToOne
     @JoinColumn(name = "task_list_id")
