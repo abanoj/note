@@ -1,8 +1,9 @@
 package com.abanoj.tasklist.tasklist.controller;
 
+import com.abanoj.tasklist.tasklist.dto.TaskListUpdateRequestDto;
 import com.abanoj.tasklist.tasklist.entity.TaskList;
 import com.abanoj.tasklist.tasklist.dto.TaskListResponseDto;
-import com.abanoj.tasklist.tasklist.dto.TaskListRequestDto;
+import com.abanoj.tasklist.tasklist.dto.TaskListCreateRequestDto;
 import com.abanoj.tasklist.tasklist.mapper.TaskListMapper;
 import com.abanoj.tasklist.tasklist.service.TaskListService;
 import jakarta.validation.Valid;
@@ -35,14 +36,14 @@ public class TaskListController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskListResponseDto> createTaskList(@Valid @RequestBody TaskListRequestDto taskListRequestDto){
+    public ResponseEntity<TaskListResponseDto> createTaskList(@Valid @RequestBody TaskListCreateRequestDto taskListRequestDto){
         TaskList taskList = taskListMapper.toTaskList(taskListRequestDto);
         TaskListResponseDto taskListResponseDto = taskListMapper.toTaskListResponseDto(taskListService.createTaskList(taskList));
         return ResponseEntity.status(HttpStatus.CREATED).body(taskListResponseDto);
     }
 
     @PutMapping("/{taskListId}")
-    public ResponseEntity<TaskListResponseDto> updateTaskList(@PathVariable("taskListId") Long id, @Valid @RequestBody TaskListRequestDto taskListRequestDto){
+    public ResponseEntity<TaskListResponseDto> updateTaskList(@PathVariable("taskListId") Long id, @Valid @RequestBody TaskListUpdateRequestDto taskListRequestDto){
         TaskList taskList = taskListMapper.toTaskList(taskListRequestDto);
         TaskListResponseDto taskListUpdated = taskListMapper.toTaskListResponseDto(taskListService.updateTaskList(id, taskList));
         return ResponseEntity.ok(taskListUpdated);

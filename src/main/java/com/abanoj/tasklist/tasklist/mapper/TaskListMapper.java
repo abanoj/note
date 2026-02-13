@@ -4,9 +4,10 @@ import com.abanoj.tasklist.auth.SecurityUtils;
 import com.abanoj.tasklist.task.entity.Task;
 import com.abanoj.tasklist.task.entity.TaskStatus;
 import com.abanoj.tasklist.task.mapper.TaskMapper;
+import com.abanoj.tasklist.tasklist.dto.TaskListUpdateRequestDto;
 import com.abanoj.tasklist.tasklist.entity.TaskList;
 import com.abanoj.tasklist.tasklist.dto.TaskListResponseDto;
-import com.abanoj.tasklist.tasklist.dto.TaskListRequestDto;
+import com.abanoj.tasklist.tasklist.dto.TaskListCreateRequestDto;
 import com.abanoj.tasklist.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,8 +35,15 @@ public class TaskListMapper {
         );
     }
 
-    public TaskList toTaskList(TaskListRequestDto taskListRequestDto){
+    public TaskList toTaskList(TaskListCreateRequestDto taskListRequestDto){
         return TaskList.builder().title(taskListRequestDto.title()).tasks(new ArrayList<>()).build();
+    }
+
+    public TaskList toTaskList(TaskListUpdateRequestDto taskListUpdateRequestDto){
+        return TaskList.builder()
+                .id(taskListUpdateRequestDto.id())
+                .title(taskListUpdateRequestDto.title())
+                .build();
     }
 
     public TaskListResponseDto toTaskListResponseDto(TaskList taskList){
