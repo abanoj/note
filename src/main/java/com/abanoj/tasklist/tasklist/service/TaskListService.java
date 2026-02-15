@@ -9,6 +9,5 @@ public interface TaskListService {
     TaskList findTaskList(Long taskListId);
     TaskList createTaskList(TaskList taskList);
     TaskList updateTaskList(Long id, TaskList taskList);
-    boolean existsById(Long id);
     void deleteTaskList(Long id);
 }
