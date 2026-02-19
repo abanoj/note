@@ -3,6 +3,7 @@ package com.abanoj.tasklist.auth.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record RegisterRequest (
     @Schema(description = "User first name", example = "John")
@@ -17,5 +18,6 @@ public record RegisterRequest (
     String email,
     @Schema(description = "User password", example = "password123")
     @NotBlank(message = "There must be a password")
+    @Size(min = 8, max = 32)
     String password
 ){}
