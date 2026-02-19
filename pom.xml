@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.abanoj</groupId>
-	<artifactId>tasklist</artifactId>
+	<artifactId>note</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>tasklist</name>
-	<description>Task List API Project</description>
+	<name>note</name>
+	<description>Notes API Project</description>
 	<url/>
 	<licenses>
 		<license/>
