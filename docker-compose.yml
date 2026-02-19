@@ -5,11 +5,32 @@ services:
     ports:
       - "3308:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: my_secret
-      MYSQL_DATABASE: tasklist
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - task_list_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
+
+#  task_list_app:
+#    build: .
+#    container_name: task_list_app
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      DB_URL: task_list_db:3306
+#      DB_USERNAME: ${DB_USERNAME}
+#      DB_PASSWORD: ${DB_PASSWORD}
+#      JWT_SECRET: ${JWT_SECRET}
+#      SPRING_PROFILES_ACTIVE: prod
+#    depends_on:
+#      task_list_db:
+#        condition: service_healthy
+#    restart: unless-stopped
 
 volumes:
   task_list_data:
