@@ -83,22 +83,17 @@ public class TaskServiceImpl implements TaskService{
     @Override
     @Transactional
     public void deleteTask(Long taskListId, Long id) {
-        checkUserOwner(taskListId);
+        TaskList taskList = checkUserOwner(taskListId);
         Task task = taskRepository.findByTaskListIdAndId(taskListId, id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found!"));
-        taskRepository.delete(task);
+        taskList.getTasks().remove(task);
         log.debug("Task {} deleted from taskList {}", id, taskListId);
     }
 
     private TaskList checkUserOwner(Long taskListId){
         User user = securityUtils.getCurrentUser();
-        TaskList taskList = taskListRepository
-                .findById(taskListId)
+        return taskListRepository
+                .findByIdAndUser(taskListId, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Task List with id " + taskListId));
-
-        if(!user.equals(taskList.getUser())){
-            throw new ResourceNotFoundException("Not found Task List with id " + taskListId);
-        }
-        return taskList;
     }
 }
