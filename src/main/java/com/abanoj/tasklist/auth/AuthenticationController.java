@@ -51,7 +51,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200", description = "Token refreshed successfully"),
             @ApiResponse(responseCode = "401", description = "Invalid or expired refresh token")
     })
-    public ResponseEntity<AuthenticationResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        return ResponseEntity.ok(authenticationService.refreshToken(request, response));
+    public ResponseEntity<AuthenticationResponse> refreshToken(HttpServletRequest request) {
+        return ResponseEntity.ok(authenticationService.refreshToken(request));
     }
 }

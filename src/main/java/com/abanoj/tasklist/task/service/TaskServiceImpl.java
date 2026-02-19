@@ -46,15 +46,13 @@ public class TaskServiceImpl implements TaskService{
     @Transactional
     public Task createTask(Long taskListId, Task task) {
         TaskList taskList = checkUserOwner(taskListId);
-        TaskStatus taskStatus = Optional.ofNullable(task.getTaskStatus()).orElse(TaskStatus.PENDING);
-        TaskPriority taskPriority = Optional.ofNullable(task.getTaskPriority()).orElse(TaskPriority.MEDIUM);
         LocalDateTime now = LocalDateTime.now();
 
         Task taskToSave = new Task(
                 null,
                 task.getTitle(),
-                taskStatus,
-                taskPriority,
+                task.getTaskStatus(),
+                task.getTaskPriority(),
                 taskList,
                 now,
                 now

@@ -12,7 +12,7 @@ public record TaskListResponseDto(
         String title,
         @Schema(description = "Total number of tasks", example = "5")
         Integer numberOfTask,
-        @Schema(description = "Completion progress (0.0 to 100.0)", example = "60.0")
+        @Schema(description = "Completion progress (0.0 to 1.0)", example = "6.0")
         Double progress,
         @Schema(description = "List of tasks")
         List<TaskDto> tasks

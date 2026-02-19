@@ -68,7 +68,7 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public AuthenticationResponse refreshToken(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String email;
