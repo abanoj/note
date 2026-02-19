@@ -1,12 +1,15 @@
 package com.abanoj.tasklist.config;
 
 import com.abanoj.tasklist.token.TokenRepository;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -39,7 +43,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        email = jwtService.extractUsername(jwt);
+        try {
+            email = jwtService.extractUsername(jwt);
+        } catch (ExpiredJwtException ex) {
+            log.warn("Expired JWT token on {}", request.getRequestURI());
+            filterChain.doFilter(request, response);
+            return;
+        } catch (JwtException ex) {
+            log.warn("Invalid JWT token on {}: {}", request.getRequestURI(), ex.getMessage());
+            filterChain.doFilter(request, response);
+            return;
+        }
         if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
             boolean isTokenValid = tokenRepository.findByToken(jwt)
@@ -49,6 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                log.debug("JWT authentication successful for user: {}", email);
             }
         }
         filterChain.doFilter(request, response);

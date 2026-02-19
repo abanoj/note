@@ -1,6 +1,8 @@
 package com.abanoj.tasklist.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +14,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(exception = ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(ResourceNotFoundException ex, HttpServletRequest request){
+        log.warn("Resource not found on {}: {}", request.getRequestURI(), ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
                 ZonedDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
@@ -29,6 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(exception = IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleException(RuntimeException ex, HttpServletRequest request){
+        log.warn("Bad request on {}: {}", request.getRequestURI(), ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
                 ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -41,6 +46,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(exception = AuthenticationNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(AuthenticationNotFoundException ex, HttpServletRequest request){
+        log.warn("Authentication failed on {}: {}", request.getRequestURI(), ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
                 ZonedDateTime.now(),
                 HttpStatus.UNAUTHORIZED.value(),
@@ -51,8 +57,23 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(exception = ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleException(ExpiredJwtException ex, HttpServletRequest request){
+        log.warn("Expired JWT token on {}", request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse(
+                ZonedDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+
     @ExceptionHandler(exception = UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(UserNotFoundException ex, HttpServletRequest request){
+        log.warn("User not found on {}: {}", request.getRequestURI(), ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
                 ZonedDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
@@ -65,6 +86,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(exception = MethodArgumentNotValidException.class)
     public ResponseEntity<MethodArgumentNotValidErrorResponse> handleException(MethodArgumentNotValidException ex, HttpServletRequest request){
+        log.warn("Validation failed on {}: {}", request.getRequestURI(), ex.getMessage());
         List<String> errorsMessages = new ArrayList<>();
 
         ex.getBindingResult()
@@ -84,6 +106,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(exception = HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleException(HttpMessageNotReadableException ex, HttpServletRequest request){
+        log.warn("Unreadable request body on {}", request.getRequestURI());
         ErrorResponse errorResponse = new ErrorResponse(
                 ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -96,7 +119,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(exception = DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleException(DataIntegrityViolationException ex, HttpServletRequest request){
-
+        log.warn("Data integrity violation on {}: {}", request.getRequestURI(), ex.getMessage());
         String message = "Duplicate data not allowed";
         Throwable rootCause = ex.getRootCause();
         if(rootCause != null){
@@ -114,6 +137,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(exception = Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex, HttpServletRequest request){
+        log.error("Unexpected error on {}: {}", request.getRequestURI(), ex.getMessage(), ex);
         ErrorResponse errorResponse = new ErrorResponse(
                 ZonedDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import static com.abanoj.tasklist.config.JwtAuthenticationFilter.TOKEN_TYPE;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -44,6 +46,7 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
+        log.info("New user registered: {}", user.getEmail());
 
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -56,6 +59,7 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
         User user = userRepository.findByEmail(request.email()).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        log.info("User authenticated: {}", request.email());
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
@@ -88,6 +92,7 @@ public class AuthenticationService {
                 .orElse(true);
 
         if (!jwtService.isTokenValid(refreshToken, user) || !isTokenValid) {
+            log.warn("Invalid refresh token for user: {}", email);
             throw new AuthenticationNotFoundException("Token not valid!");
         }
         String accessToken = jwtService.generateToken(user);

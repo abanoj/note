@@ -11,6 +11,7 @@ import com.abanoj.tasklist.tasklist.repository.TaskListRepository;
 import com.abanoj.tasklist.user.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService{
@@ -58,7 +60,9 @@ public class TaskServiceImpl implements TaskService{
                 now
         );
 
-        return taskRepository.save(taskToSave);
+        Task savedTask = taskRepository.save(taskToSave);
+        log.debug("Task created with id {} in taskList {}", savedTask.getId(), taskListId);
+        return savedTask;
     }
 
     @Override
@@ -77,7 +81,7 @@ public class TaskServiceImpl implements TaskService{
         taskToUpdate.setTaskStatus(task.getTaskStatus());
         taskToUpdate.setTaskPriority(task.getTaskPriority());
         taskToUpdate.setUpdated(LocalDateTime.now());
-
+        log.debug("Task {} updated in taskList {}", id, taskListId);
         return taskRepository.save(taskToUpdate);
     }
 
@@ -88,6 +92,7 @@ public class TaskServiceImpl implements TaskService{
         Task task = taskRepository.findByTaskListIdAndId(taskListId, id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found!"));
         taskRepository.delete(task);
+        log.debug("Task {} deleted from taskList {}", id, taskListId);
     }
 
     private TaskList checkUserOwner(Long taskListId){

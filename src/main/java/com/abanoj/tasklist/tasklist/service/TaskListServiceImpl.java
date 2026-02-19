@@ -7,12 +7,14 @@ import com.abanoj.tasklist.tasklist.repository.TaskListRepository;
 import com.abanoj.tasklist.user.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskListServiceImpl implements TaskListService {
@@ -43,7 +45,9 @@ public class TaskListServiceImpl implements TaskListService {
         taskList.setCreated(now);
         taskList.setUpdated(now);
         taskList.setUser(user);
-        return taskListRepository.save(taskList);
+        TaskList savedTaskList = taskListRepository.save(taskList);
+        log.debug("TaskList created with id {}", savedTaskList.getId());
+        return savedTaskList;
     }
 
     @Override
@@ -60,6 +64,7 @@ public class TaskListServiceImpl implements TaskListService {
         taskListToUpdate.setTitle(taskList.getTitle());
         taskListToUpdate.setUpdated(LocalDateTime.now());
 
+        log.debug("TaskList {} updated", id);
         return taskListRepository.save(taskListToUpdate);
     }
 
@@ -71,6 +76,7 @@ public class TaskListServiceImpl implements TaskListService {
                 .findByIdAndUser(id, user)
                 .orElseThrow(() -> new ResourceNotFoundException("TaskList with id " + id + " not found!"));
         taskListRepository.delete(taskList);
+        log.debug("TaskList {} deleted", id);
     }
 
 }
