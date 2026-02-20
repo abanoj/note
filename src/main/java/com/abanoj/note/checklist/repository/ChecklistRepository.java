@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface ChecklistRepository extends JpaRepository<Checklist, Long> {
-    @Query("SELECT DISTINCT tl FROM Checklist tl LEFT JOIN FETCH tl.tasks WHERE tl.user = :user")
+    @Query("SELECT DISTINCT cl FROM Checklist cl LEFT JOIN FETCH cl.items WHERE cl.user = :user")
     List<Checklist> findAllByUser(@Param("user") User user);
-    @Query("SELECT tl FROM Checklist tl LEFT JOIN FETCH tl.tasks WHERE tl.id = :id AND tl.user = :user")
+    @Query("SELECT cl FROM Checklist cl LEFT JOIN FETCH cl.items WHERE cl.id = :id AND cl.user = :user")
     Optional<Checklist> findByIdAndUser(@Param("id") Long id, @Param("user") User user);
     boolean existsByIdAndUser(Long id, User user);
 }

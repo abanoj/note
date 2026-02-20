@@ -86,7 +86,7 @@ public class ChecklistController {
     }
 
     @DeleteMapping("/{checklistId}")
-    @Operation(summary = "Delete a checklist and all its tasks")
+    @Operation(summary = "Delete a checklist and all its items")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Checklist deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Checklist not found"),

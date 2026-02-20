@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TaskRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByChecklistId(Long checklistId);
     Optional<Item> findByChecklistIdAndId(Long checklistId, Long id);
     void deleteByChecklistIdAndId(Long checklistId, Long id);

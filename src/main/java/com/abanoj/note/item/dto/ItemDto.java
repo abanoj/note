@@ -5,7 +5,7 @@ import com.abanoj.note.item.entity.ItemStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
-public record TaskDto(
+public record ItemDto(
         @Schema(description = "Item ID", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
         Long id,
         @Schema(description = "Item title", example = "Buy groceries")

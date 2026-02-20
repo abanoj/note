@@ -4,7 +4,7 @@ import com.abanoj.note.auth.SecurityUtils;
 import com.abanoj.note.checklist.entity.Checklist;
 import com.abanoj.note.exception.ResourceNotFoundException;
 import com.abanoj.note.item.entity.Item;
-import com.abanoj.note.item.repository.TaskRepository;
+import com.abanoj.note.item.repository.ItemRepository;
 import com.abanoj.note.checklist.repository.ChecklistRepository;
 import com.abanoj.note.user.User;
 import jakarta.transaction.Transactional;
@@ -19,74 +19,74 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TaskServiceImpl implements TaskService{
+public class ItemServiceImpl implements ItemService {
 
-    private final TaskRepository taskRepository;
+    private final ItemRepository itemRepository;
     private final ChecklistRepository checklistRepository;
     private final SecurityUtils securityUtils;
 
     @Override
-    public Item findTask(Long checklistId, Long id) {
+    public Item findItem(Long checklistId, Long id) {
         checkUserOwner(checklistId);
-        return taskRepository
+        return itemRepository
                 .findByChecklistIdAndId(checklistId, id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id: " + id + " not found"));
     }
 
     @Override
-    public List<Item> findAllTasks(Long checklistId) {
+    public List<Item> findAllItems(Long checklistId) {
         checkUserOwner(checklistId);
-        return taskRepository.findByChecklistId(checklistId);
+        return itemRepository.findByChecklistId(checklistId);
     }
 
     @Override
     @Transactional
-    public Item createTask(Long checklistId, Item task) {
+    public Item createItem(Long checklistId, Item item) {
         Checklist checklist = checkUserOwner(checklistId);
         LocalDateTime now = LocalDateTime.now();
 
-        Item taskToSave = new Item(
+        Item itemToSave = new Item(
                 null,
-                task.getTitle(),
-                task.getItemStatus(),
-                task.getItemPriority(),
+                item.getTitle(),
+                item.getItemStatus(),
+                item.getItemPriority(),
                 checklist,
                 now,
                 now
         );
 
-        Item savedTask = taskRepository.save(taskToSave);
-        log.debug("Item created with id {} in checklist {}", savedTask.getId(), checklistId);
-        return savedTask;
+        Item savedItem = itemRepository.save(itemToSave);
+        log.debug("Item created with id {} in checklist {}", savedItem.getId(), checklistId);
+        return savedItem;
     }
 
     @Override
     @Transactional
-    public Item updateTask(Long checklistId, Long id, Item task) {
-        if(task.getId() == null) throw new IllegalArgumentException("Item must have an ID");
-        if(!Objects.equals(task.getId(), id)) throw new IllegalArgumentException("ID and Item id do not match!");
+    public Item updateItem(Long checklistId, Long id, Item item) {
+        if(item.getId() == null) throw new IllegalArgumentException("Item must have an ID");
+        if(!Objects.equals(item.getId(), id)) throw new IllegalArgumentException("ID and Item id do not match!");
 
         checkUserOwner(checklistId);
 
-        Item taskToUpdate = taskRepository
+        Item itemToUpdate = itemRepository
                 .findByChecklistIdAndId(checklistId, id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found!"));
 
-        taskToUpdate.setTitle(task.getTitle());
-        taskToUpdate.setItemStatus(task.getItemStatus());
-        taskToUpdate.setItemPriority(task.getItemPriority());
-        taskToUpdate.setUpdated(LocalDateTime.now());
+        itemToUpdate.setTitle(item.getTitle());
+        itemToUpdate.setItemStatus(item.getItemStatus());
+        itemToUpdate.setItemPriority(item.getItemPriority());
+        itemToUpdate.setUpdated(LocalDateTime.now());
         log.debug("Item {} updated in checklist {}", id, checklistId);
-        return taskRepository.save(taskToUpdate);
+        return itemRepository.save(itemToUpdate);
     }
 
     @Override
     @Transactional
-    public void deleteTask(Long checklistId, Long id) {
+    public void deleteItem(Long checklistId, Long id) {
         Checklist checklist = checkUserOwner(checklistId);
-        Item task = taskRepository.findByChecklistIdAndId(checklistId, id)
+        Item item = itemRepository.findByChecklistIdAndId(checklistId, id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " not found!"));
-        checklist.getTasks().remove(task);
+        checklist.getItems().remove(item);
         log.debug("Item {} deleted from checklist {}", id, checklistId);
     }
 
