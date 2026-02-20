@@ -1,0 +1,15 @@
+package com.abanoj.note.item.repository;
+
+import com.abanoj.note.item.entity.Item;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface TaskRepository extends JpaRepository<Item, Long> {
+    List<Item> findByChecklistId(Long checklistId);
+    Optional<Item> findByChecklistIdAndId(Long checklistId, Long id);
+    void deleteByChecklistIdAndId(Long checklistId, Long id);
+}

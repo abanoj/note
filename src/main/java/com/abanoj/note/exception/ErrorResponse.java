@@ -12,8 +12,8 @@ public record ErrorResponse(
         Integer status,
         @Schema(description = "HTTP error type", example = "Not Found")
         String error,
-        @Schema(description = "Error detail message", example = "TaskList with id 5 not found!")
+        @Schema(description = "Error detail message", example = "Checklist with id 5 not found!")
         String message,
-        @Schema(description = "Request path", example = "/api/v1/task-lists/5")
+        @Schema(description = "Request path", example = "/api/v1/item-lists/5")
         String path) {
 }

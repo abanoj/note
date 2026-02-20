@@ -15,9 +15,9 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("TaskList API")
+                        .title("Note API")
                         .version("1.0")
-                        .description("REST API for managing task lists and tasks"))
+                        .description("REST API for managing checklist and text notes"))
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Auth"))
                 .components(new Components()
                         .addSecuritySchemes("Bearer Auth",

@@ -15,6 +15,6 @@ public record MethodArgumentNotValidErrorResponse(
         String error,
         @Schema(description = "List of validation error messages")
         List<String> messages,
-        @Schema(description = "Request path", example = "/api/v1/task-lists")
+        @Schema(description = "Request path", example = "/api/v1/item-lists")
         String path) {
 }
