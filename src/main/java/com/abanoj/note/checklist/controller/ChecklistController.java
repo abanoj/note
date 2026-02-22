@@ -13,11 +13,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/checklists")
@@ -34,12 +36,11 @@ public class ChecklistController {
             @ApiResponse(responseCode = "200", description = "Checklist retrieved successfully"),
             @ApiResponse(responseCode = "401", description = "Not authenticated")
     })
-    public ResponseEntity<List<ChecklistResponseDto>> getAll(){
-        List<ChecklistResponseDto> checklistResponseDtoList = checklistService.findAllChecklist()
-                .stream()
-                .map(checklistMapper::toChecklistResponseDto)
-                .toList();
-        return ResponseEntity.ok(checklistResponseDtoList);
+    public ResponseEntity<Page<ChecklistResponseDto>> getAll(
+            @PageableDefault(size = 10, sort = "updated", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<ChecklistResponseDto> checklistResponseDtoPage = checklistService.findAllChecklist(pageable)
+                .map(checklistMapper::toChecklistResponseDto);
+        return ResponseEntity.ok(checklistResponseDtoPage);
     }
 
     @GetMapping("/{checklistId}")

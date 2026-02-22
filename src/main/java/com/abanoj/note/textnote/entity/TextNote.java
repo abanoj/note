@@ -1,14 +1,10 @@
 package com.abanoj.note.textnote.entity;
 
-
-import com.abanoj.note.item.entity.Item;
 import com.abanoj.note.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

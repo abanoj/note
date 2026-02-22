@@ -29,7 +29,9 @@ public class TextNoteMapper {
         return new TextNoteResponseDto(
                 textNote.getId(),
                 textNote.getTitle(),
-                textNote.getContent()
+                textNote.getContent(),
+                textNote.getCreated(),
+                textNote.getUpdated()
         );
     }
 }

@@ -8,10 +8,11 @@ import com.abanoj.note.user.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -31,9 +32,9 @@ public class ChecklistServiceImpl implements ChecklistService {
     }
 
     @Override
-    public List<Checklist> findAllChecklist() {
+    public Page<Checklist> findAllChecklist(Pageable pageable) {
         User user = securityUtils.getCurrentUser();
-        return checklistRepository.findAllByUser(user);
+        return checklistRepository.findAllByUser(user, pageable);
     }
 
     @Override

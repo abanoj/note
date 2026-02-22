@@ -10,11 +10,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/text-notes")
@@ -26,13 +29,12 @@ public class TextNoteController {
 
     @GetMapping
     @Operation(summary = "Get all text notes for the authenticated user")
-    public ResponseEntity<List<TextNoteResponseDto>> getAllTextNote(){
-        List<TextNoteResponseDto> listOfTextNoteResponseDto = textNoteService
-                .findAllTextNote()
-                .stream()
-                .map(textNoteMapper::toTextNoteResponseDto)
-                .toList();
-        return ResponseEntity.ok(listOfTextNoteResponseDto);
+    public ResponseEntity<Page<TextNoteResponseDto>> getAllTextNote(
+            @PageableDefault(size = 10, sort = "updated", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<TextNoteResponseDto> pageOfTextNoteResponseDto = textNoteService
+                .findAllTextNote(pageable)
+                .map(textNoteMapper::toTextNoteResponseDto);
+        return ResponseEntity.ok(pageOfTextNoteResponseDto);
     }
 
     @GetMapping("/{textNoteId}")

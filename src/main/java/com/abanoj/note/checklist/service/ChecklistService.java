@@ -1,11 +1,11 @@
 package com.abanoj.note.checklist.service;
 
 import com.abanoj.note.checklist.entity.Checklist;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ChecklistService {
-    List<Checklist> findAllChecklist();
+    Page<Checklist> findAllChecklist(Pageable pageable);
     Checklist findChecklist(Long checklistId);
     Checklist createChecklist(Checklist checklist);
     Checklist updateChecklist(Long id, Checklist checklist);
