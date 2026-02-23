@@ -20,6 +20,7 @@ public class TextNoteMapper {
 
     public TextNote toTextNote(TextNoteUpdateRequestDto textNoteUpdateRequestDto){
         return TextNote.builder()
+                .id(textNoteUpdateRequestDto.id())
                 .title(textNoteUpdateRequestDto.title())
                 .content(textNoteUpdateRequestDto.content())
                 .build();
