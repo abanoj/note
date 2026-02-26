@@ -55,9 +55,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            String tokenType = jwtService.extractTokenType(jwt);
+            if (!JwtService.ACCESS_TOKEN_TYPE.equals(tokenType)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
             boolean isTokenValid = tokenRepository.findByToken(jwt)
-                    .map(token -> !token.isExpired() && !token.isRevoked())
+                    .map(token -> !token.isRevoked())
                     .orElse(false);
             if(jwtService.isTokenValid(jwt, userDetails) && isTokenValid){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

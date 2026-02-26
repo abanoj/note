@@ -22,6 +22,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.abanoj.note.config.JwtAuthenticationFilter.TOKEN_TYPE;
@@ -49,7 +51,8 @@ public class AuthenticationService {
 
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(jwtToken, user);
+        saveUserToken(jwtToken, user, jwtService.getJwtExpiration());
+        saveUserToken(refreshToken, user, jwtService.getRefreshExpiration());
         return new AuthenticationResponse(jwtToken, refreshToken);
     }
 
@@ -62,7 +65,8 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(jwtToken, user);
+        saveUserToken(jwtToken, user, jwtService.getJwtExpiration());
+        saveUserToken(refreshToken, user, jwtService.getRefreshExpiration());
         return new AuthenticationResponse(jwtToken, refreshToken);
     }
 
@@ -82,43 +86,47 @@ public class AuthenticationService {
             throw new AuthenticationNotFoundException("Authentication not found!");
         }
 
+        String tokenType = jwtService.extractTokenType(refreshToken);
+        if (!JwtService.REFRESH_TOKEN_TYPE.equals(tokenType)) {
+            throw new AuthenticationNotFoundException("Token not valid!");
+        }
+
         User user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
 
         boolean isTokenValid = tokenRepository.findByToken(refreshToken)
-                .map(token -> !token.isExpired() && !token.isRevoked())
-                .orElse(true);
+                .map(token -> !token.isRevoked())
+                .orElse(false);
 
         if (!jwtService.isTokenValid(refreshToken, user) || !isTokenValid) {
             log.warn("Invalid refresh token for user: {}", email);
             throw new AuthenticationNotFoundException("Token not valid!");
         }
         String accessToken = jwtService.generateToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
 
         revokeAllUserTokens(user);
-        saveUserToken(accessToken, user);
+        saveUserToken(accessToken, user, jwtService.getJwtExpiration());
+        saveUserToken(newRefreshToken, user, jwtService.getRefreshExpiration());
 
-        return new AuthenticationResponse(accessToken, refreshToken);
+        return new AuthenticationResponse(accessToken, newRefreshToken);
     }
 
     private void revokeAllUserTokens(User user) {
         List<Token> validTokens = tokenRepository.findAllValidTokensByUser(user.getId());
         if (validTokens.isEmpty()) return;
-        validTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
+        validTokens.forEach(token -> token.setRevoked(true));
         tokenRepository.saveAll(validTokens);
     }
 
-    private void saveUserToken(String jwtToken, User user) {
+    private void saveUserToken(String jwtToken, User user, long expirationMillis) {
         Token token = Token.builder()
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
                 .user(user)
-                .expired(false)
                 .revoked(false)
+                .expiresAt(LocalDateTime.now().plus(expirationMillis, ChronoUnit.MILLIS))
                 .build();
         tokenRepository.save(token);
     }

@@ -17,12 +17,24 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    public static final String ACCESS_TOKEN_TYPE = "access";
+    public static final String REFRESH_TOKEN_TYPE = "refresh";
+    private static final String TOKEN_TYPE_CLAIM = "type";
+
     @Value("${application.security.jwt.secret-key}")
     private String SECRET_KEY;
     @Value("${application.security.jwt.expiration}")
     private long JWT_EXPIRATION;
     @Value("${application.security.jwt.refresh.expiration}")
     private long REFRESH_EXPIRATION;
+
+    public long getJwtExpiration() {
+        return JWT_EXPIRATION;
+    }
+
+    public long getRefreshExpiration() {
+        return REFRESH_EXPIRATION;
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -52,16 +64,21 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
-        return buildToken(extraClaims, userDetails, JWT_EXPIRATION);
+        return buildToken(extraClaims, userDetails, JWT_EXPIRATION, ACCESS_TOKEN_TYPE);
     }
 
     public String generateRefreshToken(UserDetails userDetails){
-        return buildToken(new HashMap<>(), userDetails, REFRESH_EXPIRATION);
+        return buildToken(new HashMap<>(), userDetails, REFRESH_EXPIRATION, REFRESH_TOKEN_TYPE);
     }
 
-    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
+    public String extractTokenType(String token) {
+        return extractClaim(token, claims -> claims.get(TOKEN_TYPE_CLAIM, String.class));
+    }
+
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration, String tokenType) {
         return Jwts.builder()
                 .claims(extraClaims)
+                .claim(TOKEN_TYPE_CLAIM, tokenType)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
