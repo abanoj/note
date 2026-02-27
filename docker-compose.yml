@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - data:/var/lib/mysql
+    networks:
+      - note_net
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -16,28 +18,47 @@ services:
       retries: 5
     restart: unless-stopped
 
-# Manejo de db
   adminer:
-    container_name: adminer
     image: adminer:latest
-    restart: always
+    container_name: adminer
     ports:
       - "8888:8080"
-#  note_app:
-#    build: ./backend
-#    container_name: note_app
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      DB_URL: note_db:3306
-#      DB_USERNAME: ${DB_USERNAME}
-#      DB_PASSWORD: ${DB_PASSWORD}
-#      JWT_SECRET: ${JWT_SECRET}
-#      SPRING_PROFILES_ACTIVE: prod
-#    depends_on:
-#      note_db:
-#        condition: service_healthy
-#    restart: unless-stopped
+    networks:
+      - note_net
+    depends_on:
+      - db
+    restart: always
+
+  note_app:
+    build: ./backend
+    container_name: note_app
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      DB_URL: note_db:3306
+      SPRING_PROFILES_ACTIVE: prod
+    networks:
+      - note_net
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  note_frontend:
+    build: ./frontend
+    container_name: note_frontend
+    ports:
+      - "3000:80"
+    networks:
+      - note_net
+    depends_on:
+      - note_app
+    restart: unless-stopped
 
 volumes:
   data:
+
+networks:
+  note_net:
+    driver: bridge
