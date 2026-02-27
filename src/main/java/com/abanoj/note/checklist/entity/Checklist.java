@@ -24,6 +24,7 @@ public class Checklist {
     @Column(nullable = false)
     private String title;
     @OneToMany(mappedBy = "checklist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Item> items = new ArrayList<>();
     @Column(nullable = false, updatable = false)
     private LocalDateTime created;
