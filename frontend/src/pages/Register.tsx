@@ -1,12 +1,12 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { CheckSquare, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
 
 export default function Register() {
-  const { registerUser } = useAuth();
+  const { registerUser, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -14,13 +14,17 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       await registerUser({ firstname, lastname, email, password });
       toast.success("Cuenta creada!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       if (err instanceof AxiosError) {
         const data = err.response?.data;
@@ -38,14 +42,14 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <CheckSquare className="w-8 h-8 text-indigo-600" />
-          <h1 className="text-2xl font-bold text-gray-900">TaskList</h1>
+          <CheckSquare className="w-8 h-8 text-violet-600" />
+          <h1 className="text-2xl font-bold text-gray-900">NoteApp</h1>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Crear cuenta
           </h2>
@@ -61,7 +65,7 @@ export default function Register() {
                   required
                   value={firstname}
                   onChange={(e) => setFirstname(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 />
               </div>
               <div>
@@ -73,7 +77,7 @@ export default function Register() {
                   required
                   value={lastname}
                   onChange={(e) => setLastname(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -87,7 +91,7 @@ export default function Register() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="tu@email.com"
               />
             </div>
@@ -101,7 +105,7 @@ export default function Register() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 placeholder="********"
               />
             </div>
@@ -109,7 +113,7 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full btn-primary py-2.5 px-4 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Registrarse
@@ -120,7 +124,7 @@ export default function Register() {
             Ya tienes cuenta?{" "}
             <Link
               to="/login"
-              className="text-indigo-600 hover:text-indigo-700 font-medium"
+              className="text-violet-600 hover:text-violet-700 font-medium"
             >
               Inicia sesion
             </Link>
