@@ -2,14 +2,17 @@ import {
   createContext,
   useContext,
   useState,
+  useEffect,
   useCallback,
   type ReactNode,
 } from "react";
+import { Loader2 } from "lucide-react";
 import * as authApi from "../api/auth";
 import type { AuthenticationRequest, RegisterRequest } from "../types";
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  loading: boolean;
   loginUser: (data: AuthenticationRequest) => Promise<void>;
   registerUser: (data: RegisterRequest) => Promise<void>;
   logoutUser: () => Promise<void>;
@@ -18,9 +21,24 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    () => !!localStorage.getItem("access_token")
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    authApi
+      .validateSession()
+      .then(() => setIsAuthenticated(true))
+      .catch(() => {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const loginUser = useCallback(async (data: AuthenticationRequest) => {
     const res = await authApi.login(data);
@@ -46,9 +64,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
+      </div>
+    );
+  }
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loginUser, registerUser, logoutUser }}
+      value={{ isAuthenticated, loading, loginUser, registerUser, logoutUser }}
     >
       {children}
     </AuthContext.Provider>
