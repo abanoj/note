@@ -16,10 +16,10 @@ export default function TextNoteCard({ note, onDelete, onEdit }: Props) {
     : "Sin contenido";
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
       <Link to={`/notes/${note.id}`} className="block p-4">
         <div className="flex items-center gap-2 mb-2">
-          <FileText className="w-5 h-5 text-amber-500 shrink-0" />
+          <FileText className="w-5 h-5 text-violet-500 shrink-0" />
           <h3 className="font-semibold text-gray-900">{note.title}</h3>
         </div>
         <p className="text-sm text-gray-500 line-clamp-2">{preview}</p>
@@ -28,7 +28,7 @@ export default function TextNoteCard({ note, onDelete, onEdit }: Props) {
       <div className="border-t border-gray-100 px-4 py-2 flex justify-end gap-1">
         <button
           onClick={() => onEdit(note)}
-          className="p-1.5 text-gray-400 hover:text-indigo-600 rounded transition-colors cursor-pointer"
+          className="p-1.5 text-gray-400 hover:text-violet-600 rounded transition-colors cursor-pointer"
           title="Editar"
         >
           <Pencil className="w-4 h-4" />

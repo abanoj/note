@@ -55,7 +55,7 @@ export default function TextNoteDetail() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-6 h-6 animate-spin text-indigo-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-violet-600" />
       </div>
     );
   }
@@ -64,7 +64,7 @@ export default function TextNoteDetail() {
     return (
       <div className="text-center py-20">
         <p className="text-gray-500">Nota no encontrada</p>
-        <Link to="/" className="text-indigo-600 text-sm mt-2 inline-block">
+        <Link to="/dashboard" className="text-violet-600 text-sm mt-2 inline-block">
           Volver al inicio
         </Link>
       </div>
@@ -74,26 +74,26 @@ export default function TextNoteDetail() {
   return (
     <div>
       <Link
-        to="/"
-        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-indigo-600 mb-4 transition-colors"
+        to="/dashboard"
+        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-violet-600 mb-4 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Volver al inicio
       </Link>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-start justify-between mb-4">
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="text-xl font-bold text-gray-900 border-0 border-b-2 border-transparent focus:border-indigo-500 focus:outline-none w-full mr-4 pb-1"
+            className="text-xl font-bold text-gray-900 border-0 border-b-2 border-transparent focus:border-violet-500 focus:outline-none w-full mr-4 pb-1"
             placeholder="Titulo de la nota..."
           />
           <button
             onClick={handleSave}
             disabled={!hasChanges || !title.trim() || saving}
-            className="flex items-center gap-1.5 bg-indigo-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0 cursor-pointer"
+            className="flex items-center gap-1.5 btn-primary px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed shrink-0 cursor-pointer"
           >
             <Save className="w-4 h-4" />
             {saving ? "Guardando..." : "Guardar"}

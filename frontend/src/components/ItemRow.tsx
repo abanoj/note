@@ -69,7 +69,7 @@ export default function ItemRow({
 
   return (
     <div
-      className={`flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-lg group hover:shadow-sm transition-shadow ${
+      className={`flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-xl group hover:shadow-sm transition-shadow ${
         item.status === "DONE" ? "opacity-60" : ""
       }`}
     >
@@ -81,7 +81,7 @@ export default function ItemRow({
         onChange={() =>
           onStatusChange(item, item.status === "DONE" ? "PENDING" : "DONE")
         }
-        className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 shrink-0 cursor-pointer"
+        className="w-4 h-4 rounded border-gray-300 text-violet-600 focus:ring-violet-500 shrink-0 cursor-pointer"
       />
 
       {editing ? (
@@ -95,7 +95,7 @@ export default function ItemRow({
             if (e.key === "Enter") saveTitle();
             if (e.key === "Escape") cancelEdit();
           }}
-          className="flex-1 text-sm px-1 py-0.5 border border-indigo-300 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="flex-1 text-sm px-1 py-0.5 border border-violet-300 rounded focus:outline-none focus:ring-1 focus:ring-violet-500"
         />
       ) : (
         <span

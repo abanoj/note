@@ -13,11 +13,11 @@ export default function ChecklistCard({ checklist, onDelete, onEdit }: Props) {
   const progressPercent = Math.round(progress * 100);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
       <Link to={`/lists/${checklist.id}`} className="block p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
-            <ListTodo className="w-5 h-5 text-indigo-500 shrink-0" />
+            <ListTodo className="w-5 h-5 text-violet-500 shrink-0" />
             <h3 className="font-semibold text-gray-900">{checklist.title}</h3>
           </div>
           <span className="text-xs text-gray-400 shrink-0 ml-2">
@@ -34,16 +34,8 @@ export default function ChecklistCard({ checklist, onDelete, onEdit }: Props) {
             </div>
             <div className="w-full bg-gray-100 rounded-full h-1.5">
               <div
-                className="h-1.5 rounded-full transition-all duration-300"
-                style={{
-                  width: `${progressPercent}%`,
-                  backgroundColor:
-                    progressPercent === 100
-                      ? "#22c55e"
-                      : progressPercent > 50
-                        ? "#eab308"
-                        : "#6366f1",
-                }}
+                className="h-1.5 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-all duration-300"
+                style={{ width: `${progressPercent}%` }}
               />
             </div>
           </div>
@@ -53,7 +45,7 @@ export default function ChecklistCard({ checklist, onDelete, onEdit }: Props) {
       <div className="border-t border-gray-100 px-4 py-2 flex justify-end gap-1">
         <button
           onClick={() => onEdit(checklist)}
-          className="p-1.5 text-gray-400 hover:text-indigo-600 rounded transition-colors cursor-pointer"
+          className="p-1.5 text-gray-400 hover:text-violet-600 rounded transition-colors cursor-pointer"
           title="Editar"
         >
           <Pencil className="w-4 h-4" />

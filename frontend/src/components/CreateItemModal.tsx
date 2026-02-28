@@ -25,8 +25,8 @@ export default function CreateItemModal({ open, onClose, onSubmit }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-sm mx-4">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-semibold text-gray-900">
             Nuevo item
@@ -50,7 +50,7 @@ export default function CreateItemModal({ open, onClose, onSubmit }: Props) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Que necesitas hacer?"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
             />
           </div>
 
@@ -61,7 +61,7 @@ export default function CreateItemModal({ open, onClose, onSubmit }: Props) {
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value as ItemPriority)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent cursor-pointer"
             >
               <option value="LOW">Baja</option>
               <option value="MEDIUM">Media</option>
@@ -73,14 +73,14 @@ export default function CreateItemModal({ open, onClose, onSubmit }: Props) {
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={!title.trim()}
-              className="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-sm font-medium btn-primary rounded-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               Crear
             </button>

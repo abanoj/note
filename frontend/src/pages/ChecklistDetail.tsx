@@ -110,7 +110,7 @@ export default function ChecklistDetail() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-6 h-6 animate-spin text-indigo-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-violet-600" />
       </div>
     );
   }
@@ -119,7 +119,7 @@ export default function ChecklistDetail() {
     return (
       <div className="text-center py-20">
         <p className="text-gray-500">Checklist no encontrado</p>
-        <Link to="/" className="text-indigo-600 text-sm mt-2 inline-block">
+        <Link to="/dashboard" className="text-violet-600 text-sm mt-2 inline-block">
           Volver al inicio
         </Link>
       </div>
@@ -137,18 +137,18 @@ export default function ChecklistDetail() {
   return (
     <div>
       <Link
-        to="/"
-        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-indigo-600 mb-4 transition-colors"
+        to="/dashboard"
+        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-violet-600 mb-4 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Volver al inicio
       </Link>
 
       <div className="flex items-start justify-between mb-2">
-        <h1 className="text-xl font-bold text-gray-900">{checklist.title}</h1>
+        <h1 className="text-xl font-bold text-gradient">{checklist.title}</h1>
         <button
           onClick={() => setModalOpen(true)}
-          className="flex items-center gap-1.5 bg-indigo-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors shrink-0 cursor-pointer"
+          className="flex items-center gap-1.5 btn-primary px-3 py-1.5 rounded-lg text-sm font-medium shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           Nuevo item
@@ -166,16 +166,8 @@ export default function ChecklistDetail() {
           </div>
           <div className="w-full bg-gray-100 rounded-full h-2">
             <div
-              className="h-2 rounded-full transition-all duration-300"
-              style={{
-                width: `${progressPercent}%`,
-                backgroundColor:
-                  progressPercent === 100
-                    ? "#22c55e"
-                    : progressPercent > 50
-                      ? "#eab308"
-                      : "#6366f1",
-              }}
+              className="h-2 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
             />
           </div>
         </div>
@@ -197,7 +189,7 @@ export default function ChecklistDetail() {
               onClick={() => setStatusFilter(value)}
               className={`px-2.5 py-1 text-xs rounded-full font-medium transition-colors cursor-pointer ${
                 statusFilter === value
-                  ? "bg-indigo-100 text-indigo-700"
+                  ? "bg-violet-100 text-violet-700"
                   : "bg-gray-100 text-gray-500 hover:bg-gray-200"
               }`}
             >
