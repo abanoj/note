@@ -3,12 +3,12 @@ import { CheckSquare, ListTodo, FileText, BarChart3, Sparkles, Zap, Shield } fro
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       {/* Nav */}
-      <nav className="border-b border-white/10">
+      <nav className="bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckSquare className="w-6 h-6 text-violet-400" />
+            <CheckSquare className="w-6 h-6 text-violet-600" />
             <span className="text-lg font-bold text-gradient">NoteApp</span>
           </div>
           <div className="flex items-center gap-3">
@@ -30,7 +30,7 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-4 pt-24 pb-20 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm mb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 border border-violet-200 text-violet-700 text-sm mb-6">
           <Sparkles className="w-4 h-4" />
           Organiza tu dia de forma simple
         </div>
@@ -39,7 +39,7 @@ export default function Landing() {
           <br />
           <span className="text-gradient">en un solo lugar</span>
         </h1>
-        <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-10">
+        <p className="text-lg text-gray-500 max-w-2xl mx-auto mb-10">
           Note te ayuda a organizar checklists con seguimiento de progreso
           y notas de texto, todo en una interfaz limpia y moderna.
         </p>
@@ -84,13 +84,13 @@ export default function Landing() {
           ].map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
-              className="card p-6 rounded-2xl"
+              className="card p-6 rounded-2xl hover:shadow-md transition-shadow"
             >
-              <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center mb-4">
-                <Icon className="w-5 h-5 text-violet-400" />
+              <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center mb-4">
+                <Icon className="w-5 h-5 text-violet-600" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-              <p className="text-sm text-slate-400">{desc}</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+              <p className="text-sm text-gray-500">{desc}</p>
             </div>
           ))}
         </div>
@@ -103,17 +103,17 @@ export default function Landing() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {/* Free */}
-          <div className="card p-8 rounded-2xl border-violet-500/30">
+          <div className="card p-8 rounded-2xl">
             <div className="flex items-center gap-2 mb-4">
-              <Zap className="w-5 h-5 text-violet-400" />
+              <Zap className="w-5 h-5 text-violet-600" />
               <h3 className="text-xl font-bold">Free</h3>
             </div>
-            <p className="text-3xl font-extrabold mb-1">$0 <span className="text-base font-normal text-slate-400">/mes</span></p>
-            <p className="text-sm text-slate-400 mb-6">Perfecto para empezar</p>
-            <ul className="space-y-3 text-sm text-slate-300 mb-8">
-              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-400" />Checklists ilimitados</li>
-              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-400" />Notas de texto ilimitadas</li>
-              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-400" />Seguimiento de progreso</li>
+            <p className="text-3xl font-extrabold mb-1">$0 <span className="text-base font-normal text-gray-400">/mes</span></p>
+            <p className="text-sm text-gray-500 mb-6">Perfecto para empezar</p>
+            <ul className="space-y-3 text-sm text-gray-600 mb-8">
+              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-600" />Checklists ilimitados</li>
+              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-600" />Notas de texto ilimitadas</li>
+              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-600" />Seguimiento de progreso</li>
             </ul>
             <Link to="/register" className="btn-primary w-full py-2.5 rounded-lg text-sm font-semibold text-center block">
               Comenzar gratis
@@ -122,21 +122,21 @@ export default function Landing() {
 
           {/* Pro */}
           <div className="card p-8 rounded-2xl relative overflow-hidden opacity-75">
-            <div className="absolute top-4 right-4 px-2 py-0.5 bg-violet-500/20 text-violet-300 text-xs font-medium rounded-full">
+            <div className="absolute top-4 right-4 px-2 py-0.5 bg-violet-100 text-violet-700 text-xs font-medium rounded-full">
               Proximamente
             </div>
             <div className="flex items-center gap-2 mb-4">
-              <Shield className="w-5 h-5 text-violet-400" />
+              <Shield className="w-5 h-5 text-violet-600" />
               <h3 className="text-xl font-bold">Pro</h3>
             </div>
-            <p className="text-3xl font-extrabold mb-1">$5 <span className="text-base font-normal text-slate-400">/mes</span></p>
-            <p className="text-sm text-slate-400 mb-6">Para usuarios avanzados</p>
-            <ul className="space-y-3 text-sm text-slate-300 mb-8">
-              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-400" />Todo del plan Free</li>
-              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-400" />Etiquetas y categorias</li>
-              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-400" />Exportar a PDF/Markdown</li>
+            <p className="text-3xl font-extrabold mb-1">$5 <span className="text-base font-normal text-gray-400">/mes</span></p>
+            <p className="text-sm text-gray-500 mb-6">Para usuarios avanzados</p>
+            <ul className="space-y-3 text-sm text-gray-600 mb-8">
+              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-600" />Todo del plan Free</li>
+              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-600" />Etiquetas y categorias</li>
+              <li className="flex items-center gap-2"><CheckSquare className="w-4 h-4 text-violet-600" />Exportar a PDF/Markdown</li>
             </ul>
-            <button disabled className="w-full py-2.5 rounded-lg text-sm font-semibold bg-slate-700 text-slate-400 cursor-not-allowed">
+            <button disabled className="w-full py-2.5 rounded-lg text-sm font-semibold bg-gray-200 text-gray-400 cursor-not-allowed">
               Proximamente
             </button>
           </div>
@@ -144,11 +144,11 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-8">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-slate-500">
+      <footer className="border-t border-gray-200 py-8">
+        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center gap-2">
-            <CheckSquare className="w-4 h-4 text-violet-400" />
-            <span className="font-semibold text-slate-400">NoteApp</span>
+            <CheckSquare className="w-4 h-4 text-violet-600" />
+            <span className="font-semibold text-gray-600">NoteApp</span>
           </div>
           <p>&copy; {new Date().getFullYear()} NoteApp by Jesús Abano. Todos los derechos reservados.</p>
         </div>

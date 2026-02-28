@@ -9,7 +9,7 @@ body {
 
 @layer components {
   .text-gradient {
-    @apply bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent;
   }
 
   .btn-primary {
@@ -17,10 +17,10 @@ body {
   }
 
   .btn-secondary {
-    @apply bg-white/10 border border-white/20 text-slate-300 hover:bg-white/20 transition-all;
+    @apply border border-gray-300 text-gray-700 hover:bg-gray-100 transition-all;
   }
 
   .card {
-    @apply bg-white/5 border border-white/10 backdrop-blur-sm;
+    @apply bg-white border border-gray-200 shadow-sm;
   }
 }
