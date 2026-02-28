@@ -10,19 +10,19 @@ export default function Layout() {
   const handleLogout = async () => {
     await logoutUser();
     toast.success("Sesion cerrada");
-    navigate("/login");
+    navigate("/");
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 shadow-sm">
+      <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link
-            to="/"
-            className="flex items-center gap-2 text-gray-900 font-semibold text-lg hover:text-indigo-600 transition-colors"
+            to="/dashboard"
+            className="flex items-center gap-2 font-semibold text-lg hover:opacity-80 transition-opacity"
           >
-            <CheckSquare className="w-5 h-5 text-indigo-600" />
-            Note
+            <CheckSquare className="w-5 h-5 text-violet-600" />
+            <span className="text-gradient">NoteApp</span>
           </Link>
           <button
             onClick={handleLogout}
