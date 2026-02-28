@@ -1,8 +1,10 @@
 import api from "./axios";
-import type { TextNoteCreateRequestDto, TextNoteUpdateRequestDto, TextNoteResponseDto } from "../types";
+import type { TextNoteCreateRequestDto, TextNoteUpdateRequestDto, TextNoteResponseDto, Page } from "../types";
 
-export const getTextNotes = () =>
-  api.get<TextNoteResponseDto[]>("/text-notes");
+export const getTextNotes = (page = 0, size = 10, sort = "updated,desc") =>
+  api.get<Page<TextNoteResponseDto>>("/text-notes", {
+    params: { page, size, sort },
+  });
 
 export const getTextNote = (id: number) =>
   api.get<TextNoteResponseDto>(`/text-notes/${id}`);

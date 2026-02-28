@@ -9,6 +9,7 @@ import TextNoteCard from "../components/TextNoteCard";
 import CreateChecklistModal from "../components/CreateChecklistModal";
 import CreateTextNoteModal from "../components/CreateTextNoteModal";
 import ConfirmDialog from "../components/ConfirmDialog";
+import Pagination from "../components/Pagination";
 
 type DeleteTarget = { type: "checklist"; id: number } | { type: "note"; id: number } | null;
 
@@ -16,6 +17,11 @@ export default function Dashboard() {
   const [checklists, setChecklists] = useState<ChecklistResponseDto[]>([]);
   const [notes, setNotes] = useState<TextNoteResponseDto[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [checklistPage, setChecklistPage] = useState(0);
+  const [checklistTotalPages, setChecklistTotalPages] = useState(0);
+  const [notePage, setNotePage] = useState(0);
+  const [noteTotalPages, setNoteTotalPages] = useState(0);
 
   const [checklistModalOpen, setChecklistModalOpen] = useState(false);
   const [editingChecklist, setEditingChecklist] = useState<ChecklistResponseDto | null>(null);
@@ -25,24 +31,34 @@ export default function Dashboard() {
 
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget>(null);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (cPage = checklistPage, nPage = notePage) => {
     try {
       const [checklistsRes, notesRes] = await Promise.all([
-        checklistsApi.getChecklists(),
-        textNotesApi.getTextNotes(),
+        checklistsApi.getChecklists(cPage),
+        textNotesApi.getTextNotes(nPage),
       ]);
-      setChecklists(checklistsRes.data);
-      setNotes(notesRes.data);
+      setChecklists(checklistsRes.data.content);
+      setChecklistTotalPages(checklistsRes.data.totalPages);
+      setNotes(notesRes.data.content);
+      setNoteTotalPages(notesRes.data.totalPages);
     } catch {
       toast.error("Error al cargar los datos");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [checklistPage, notePage]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const handleChecklistPageChange = (page: number) => {
+    setChecklistPage(page);
+  };
+
+  const handleNotePageChange = (page: number) => {
+    setNotePage(page);
+  };
 
   // Checklist handlers
   const handleChecklistSubmit = async (title: string) => {
@@ -111,7 +127,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-6 h-6 animate-spin text-indigo-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-violet-600" />
       </div>
     );
   }
@@ -121,13 +137,13 @@ export default function Dashboard() {
       {/* Checklists section */}
       <section>
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-900">Mis checklists</h1>
+          <h1 className="text-xl font-bold text-gradient">Mis checklists</h1>
           <button
             onClick={() => {
               setEditingChecklist(null);
               setChecklistModalOpen(true);
             }}
-            className="flex items-center gap-1.5 bg-indigo-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 btn-primary px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             Nuevo checklist
@@ -135,36 +151,45 @@ export default function Dashboard() {
         </div>
 
         {checklists.length === 0 ? (
-          <div className="text-center py-12">
-            <Inbox className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <div className="text-center py-12 animate-fade-in">
+            <div className="w-16 h-16 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-4">
+              <Inbox className="w-8 h-8 text-violet-300" />
+            </div>
             <p className="text-gray-500 text-sm">
               No tienes checklists todavia. Crea uno para empezar!
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {checklists.map((checklist) => (
-              <ChecklistCard
-                key={checklist.id}
-                checklist={checklist}
-                onDelete={(id) => setDeleteTarget({ type: "checklist", id })}
-                onEdit={openEditChecklist}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {checklists.map((checklist) => (
+                <ChecklistCard
+                  key={checklist.id}
+                  checklist={checklist}
+                  onDelete={(id) => setDeleteTarget({ type: "checklist", id })}
+                  onEdit={openEditChecklist}
+                />
+              ))}
+            </div>
+            <Pagination
+              page={checklistPage}
+              totalPages={checklistTotalPages}
+              onPageChange={handleChecklistPageChange}
+            />
+          </>
         )}
       </section>
 
       {/* Text Notes section */}
       <section>
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-900">Mis notas</h1>
+          <h1 className="text-xl font-bold text-gradient">Mis notas</h1>
           <button
             onClick={() => {
               setEditingNote(null);
               setNoteModalOpen(true);
             }}
-            className="flex items-center gap-1.5 bg-amber-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-amber-700 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 btn-primary px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             Nueva nota
@@ -172,23 +197,32 @@ export default function Dashboard() {
         </div>
 
         {notes.length === 0 ? (
-          <div className="text-center py-12">
-            <Inbox className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <div className="text-center py-12 animate-fade-in">
+            <div className="w-16 h-16 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-4">
+              <Inbox className="w-8 h-8 text-violet-300" />
+            </div>
             <p className="text-gray-500 text-sm">
               No tienes notas todavia. Crea una para empezar!
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {notes.map((note) => (
-              <TextNoteCard
-                key={note.id}
-                note={note}
-                onDelete={(id) => setDeleteTarget({ type: "note", id })}
-                onEdit={openEditNote}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {notes.map((note) => (
+                <TextNoteCard
+                  key={note.id}
+                  note={note}
+                  onDelete={(id) => setDeleteTarget({ type: "note", id })}
+                  onEdit={openEditNote}
+                />
+              ))}
+            </div>
+            <Pagination
+              page={notePage}
+              totalPages={noteTotalPages}
+              onPageChange={handleNotePageChange}
+            />
+          </>
         )}
       </section>
 
