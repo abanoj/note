@@ -117,16 +117,24 @@ backend/src/main/java/com/abanoj/note/
 │          │       ┌──────────────┐       │ _id (FK) │
 │          │──1:N──│   TextNote   │       └──────────┘
 │          │       │              │
-│          │       │ id           │       ┌──────────┐
-│          │──1:N──│ title        │       │  Token   │
-│          │       │ content      │       │          │
-└──────────┘       │ created      │       │ id       │
-                   │ updated      │       │ token    │
-                   │ user_id (FK) │       │ type     │
-                   └──────────────┘       │ revoked  │
-                                          │ expiresAt│
-                                          │ user_id  │
-                                          └──────────┘
+│          │       │ id           │
+│          │       │ title        │
+│          │       │ content      │
+│          │       │ created      │
+│          │       │ updated      │
+│          │       │ user_id (FK) │
+│          │       └──────────────┘
+│          │
+│          │       ┌──────────────┐
+│          │──1:N──│    Token     │
+│          │       │              │
+│          │       │ id           │
+│          │       │ token        │
+│          │       │ type         │
+│          │       │ revoked      │
+│          │       │ expiresAt    │
+│          │       │ user_id (FK) │
+└──────────┘       └──────────────┘
 ```
 
 ## Seguridad
